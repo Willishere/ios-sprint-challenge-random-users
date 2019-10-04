@@ -9,11 +9,38 @@
 import Foundation
 
 struct UsersPhotoReference: Codable {
-    var results: [String]
+    let results: [String]
+    let picture: URL
     
-    ResultsCodingKey: String, CodingKey {
-        enum 
+    enum ResultsKey: String, CodingKey {
+        case results
+        case picture
+        
+        enum MainKey: String, CodingKey {
+            case name
+            case id
+            case picture
+            
+            
+            enum NameKey: String, CodingKey{
+                case title
+                case first
+                case last
+                
+            }
+            
+            enum IdKey: String, CodingKey {
+                case value
+                
+            }
+            
+            enum PictureKey: String, CodingKey {
+                case large
+            }
+        }
     }
+    
+    
     
 }
  
