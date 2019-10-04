@@ -9,9 +9,8 @@
 import UIKit
 
 class UsersTableViewController: UITableViewController {
-
-    let user = UsersPhotoReference()
-    
+    var users = [UsersPhotoReference]()
+    var user: UsersPhotoReference?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,19 +23,19 @@ class UsersTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
- 
+    
+    
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return user.rows
+        return users.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
         
-        
+        let user = user.
         // Configure the cell...
 
         return cell
