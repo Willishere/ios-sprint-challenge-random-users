@@ -10,7 +10,7 @@ import Foundation
 
 struct UsersPhotoReference: Codable {
     let results: [String]
-    let picture: URL
+    let picture: URL?
     
     enum ResultsKey: String, CodingKey {
         case results
