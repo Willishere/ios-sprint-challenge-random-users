@@ -35,7 +35,7 @@ class UserDetailViewController: UIViewController {
         detailLabel.text = user.name
         emailLabel.text = user.email
         phoneNumber.text = user.phone
-    
+        
         
     }
 }

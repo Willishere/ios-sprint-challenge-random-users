@@ -55,7 +55,7 @@ struct UsersPhotoReference: Codable {
     
 }
 
-struct Users: Codable{
-    let results: [UsersPhotoReference]
-}
+//struct Users: Codable{
+//    let results: [UsersPhotoReference]
+//}
  

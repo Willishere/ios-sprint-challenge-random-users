@@ -15,12 +15,13 @@ class UserController{
     func fetchUsersPhotos(using session: URLSession = URLSession.shared, completion: @escaping ([UsersPhotoReference]?, Error?) -> Void) {
         
         let url = self.url(forInfoForUser: "1000")
-        fetch(from: url, using: session) { ( users: Users?, error: Error?) in
+        print(url.absoluteURL)
+        fetch(from: url, using: session) { ( users: [UsersPhotoReference]?, error: Error?) in
             guard let users = users else {
                 completion(nil, error)
                 return
             }
-            completion(users.results, nil)
+            completion(users, nil)
         }
     }
     

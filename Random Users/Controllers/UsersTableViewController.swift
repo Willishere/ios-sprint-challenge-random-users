@@ -9,10 +9,17 @@
 import UIKit
 
 class UsersTableViewController: UITableViewController {
-    var users = [UsersPhotoReference]()
+    var users = [UsersPhotoReference](){
+        didSet{
+            DispatchQueue.main.sync {
+                self.tableView.reloadData()
+            }
+        }
+    }
     var userController = UserController()
     var user: UsersPhotoReference?
     var key = Cache<URL, UIImage>()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,10 +53,10 @@ class UsersTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
         let user = users[indexPath.row]
         
-        cell.textLabel?.text = user.name
+        //cell.textLabel?.text = user.name
         if let URL = user.picture {
             if key.value(key: URL) != nil {
                 cell.imageView?.image = key.value(key: URL)
