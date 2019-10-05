@@ -10,11 +10,24 @@ import UIKit
 
 class UsersTableViewController: UITableViewController {
     var users = [UsersPhotoReference]()
+    var userController = UserController()
     var user: UsersPhotoReference?
+    var key = Cache<URL, UIImage>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        userController.fetchUsersPhotos { (usersList, error) in
+            if let error = error{
+                NSLog("There is an \(error)")
+                return
+            }
+            self.users = usersList ?? []
+            DispatchQueue.main.sync {
+                self.tableView.reloadData()
+            }
+        }
+        
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -34,8 +47,34 @@ class UsersTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let user = users[indexPath.row]
         
-        let user = user.
+        cell.textLabel?.text = user.name
+        if let URL = user.picture {
+            if key.value(key: URL) != nil {
+                cell.imageView?.image = key.value(key: URL)
+            }else{
+                URLSession.shared.dataTask(with: URL){(data, _, error) in
+                    if let error = error {
+                        NSLog("This is an \(error)")
+                        return
+                    }
+                    guard let data = data else {return}
+                    
+                
+                    DispatchQueue.main.async {
+                        guard let image = UIImage(data: data) else {return}
+                        cell.imageView?.image = image
+                        self.key.cache(value: image, key: URL)
+                    }
+                }
+            }
+                
+            
+        }
+        
+        
+      
         // Configure the cell...
 
         return cell
@@ -77,14 +116,18 @@ class UsersTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "showDetail" {
+            guard let detailVC = segue.destination as? UserDetailViewController, let indexPath = tableView.indexPathForSelectedRow else {return}
+            
+            detailVC.key = key
+            detailVC.user = users[indexPath.row]
+        }
     }
-    */
+    
 
 }
