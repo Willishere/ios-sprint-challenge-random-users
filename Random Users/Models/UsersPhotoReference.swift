@@ -59,3 +59,15 @@ struct UsersPhotoReference: Codable {
 //    let results: [UsersPhotoReference]
 //}
  
+struct Results: Decodable {
+    var results: [UsersPhotoReference]
+    
+    enum CodingKeys: String, CodingKey {
+        case results
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        results = try container.decode([UsersPhotoReference].self, forKey: .results)
+    }
+}
