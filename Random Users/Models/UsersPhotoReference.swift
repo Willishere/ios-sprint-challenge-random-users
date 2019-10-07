@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+
 struct UsersPhotoReference: Codable {
     let name: String
     let picture: URL?
@@ -35,6 +37,7 @@ struct UsersPhotoReference: Codable {
             }
  
      }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: ResultsKey.self)
         var nameContainer = try container.nestedUnkeyedContainer(forKey: .name)
@@ -59,15 +62,4 @@ struct UsersPhotoReference: Codable {
 //    let results: [UsersPhotoReference]
 //}
  
-struct Results: Decodable {
-    var results: [UsersPhotoReference]
-    
-    enum CodingKeys: String, CodingKey {
-        case results
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        results = try container.decode([UsersPhotoReference].self, forKey: .results)
-    }
-}
+

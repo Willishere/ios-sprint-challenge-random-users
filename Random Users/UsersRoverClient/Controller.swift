@@ -12,11 +12,11 @@ class UserController{
     
         let baseURL = URL(string: "https://randomuser.me/api/")!
     
-    func fetchUsersPhotos(using session: URLSession = URLSession.shared, completion: @escaping ([UsersPhotoReference]?, Error?) -> Void) {
+    func fetchUsersPhotos(using session: URLSession = URLSession.shared, completion: @escaping (Results?, Error?) -> Void) {
         
         let url = self.url(forInfoForUser: "1000")
         print(url.absoluteURL)
-        fetch(from: url, using: session) { ( users: [UsersPhotoReference]?, error: Error?) in
+        fetch(from: url, using: session) { ( users: Results?, error: Error?) in
             guard let users = users else {
                 completion(nil, error)
                 return
@@ -32,9 +32,9 @@ class UserController{
         return urlComponents.url!
     }
     
-    private func fetch<T: Codable>(from url: URL,
+    private func fetch<Results: Codable>(from url: URL,
                               using session: URLSession = URLSession.shared,
-                              completion: @escaping (T?, Error?) -> Void) {
+                              completion: @escaping (Results?, Error?) -> Void) {
            session.dataTask(with: url) { (data, response, error) in
                if let error = error {
                    completion(nil, error)
@@ -48,7 +48,7 @@ class UserController{
                
                do {
                  let jsonDecoder = JSONDecoder()
-                   let decodedObject = try jsonDecoder.decode(T.self, from: data)
+                   let decodedObject = try jsonDecoder.decode(Results.self, from: data)
                    completion(decodedObject, nil)
                } catch {
                    completion(nil, error)

@@ -9,7 +9,7 @@
 import UIKit
 
 class UsersTableViewController: UITableViewController {
-    var users = [UsersPhotoReference](){
+    var users: Results?{
         didSet{
             DispatchQueue.main.sync {
                 self.tableView.reloadData()
@@ -17,7 +17,7 @@ class UsersTableViewController: UITableViewController {
         }
     }
     var userController = UserController()
-    var user: UsersPhotoReference?
+ 
     var key = Cache<URL, UIImage>()
     
     
@@ -28,7 +28,7 @@ class UsersTableViewController: UITableViewController {
                 NSLog("There is an \(error)")
                 return
             }
-            self.users = usersList ?? []
+            self.users = usersList ?? self.users
             DispatchQueue.main.sync {
                 self.tableView.reloadData()
             }
@@ -48,16 +48,16 @@ class UsersTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return users.count
+        return users?.results.count ?? 0
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
-        let user = users[indexPath.row]
+        let user = users?.results[indexPath.row]
         
         //cell.textLabel?.text = user.name
-        if let URL = user.picture {
+        if let URL = user?.picture {
             if key.value(key: URL) != nil {
                 cell.imageView?.image = key.value(key: URL)
             }else{
@@ -132,7 +132,7 @@ class UsersTableViewController: UITableViewController {
             guard let detailVC = segue.destination as? UserDetailViewController, let indexPath = tableView.indexPathForSelectedRow else {return}
             
             detailVC.key = key
-            detailVC.user = users[indexPath.row]
+            detailVC.user = users?.results[indexPath.row]
         }
     }
     
