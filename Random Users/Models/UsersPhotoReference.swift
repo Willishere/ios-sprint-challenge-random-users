@@ -8,8 +8,6 @@
 
 import Foundation
 
-
-
 struct UsersPhotoReference: Codable {
     let name: String
     let picture: URL?
@@ -38,24 +36,43 @@ struct UsersPhotoReference: Codable {
  
      }
     
+//    init(from decoder: Decoder) throws {
+//        let container = try decoder.container(keyedBy: ResultsKey.self)
+//        var nameContainer = try container.nestedUnkeyedContainer(forKey: .name)
+//              let nameContentContainer = try nameContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self)
+//              let titleNameContainer = try nameContentContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self, forKey: .title)
+//              let firstNameContainer = try nameContentContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self, forKey: .first)
+//              let lastNameContainer = try nameContentContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self, forKey: .last)
+//
+//
+//              name = "\(titleNameContainer)\t \(firstNameContainer)\t\(lastNameContainer)"
+//
+//        let photo = try container.decode(String.self, forKey: .picture)
+//        picture = URL(string: photo)
+//
+//        email = try container.decode(String.self, forKey: .email)
+//        phone = try container.decode(String.self, forKey: .phone)
+//    }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: ResultsKey.self)
-        var nameContainer = try container.nestedUnkeyedContainer(forKey: .name)
-              let nameContentContainer = try nameContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self)
-              let titleNameContainer = try nameContentContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self, forKey: .title)
-              let firstNameContainer = try nameContentContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self, forKey: .first)
-              let lastNameContainer = try nameContentContainer.nestedContainer(keyedBy: ResultsKey.NameKey.self, forKey: .last)
-              
-              
-              name = "\(titleNameContainer)\t \(firstNameContainer)\t\(lastNameContainer)"
+        let nameContentContainer = try container.nestedContainer(keyedBy: ResultsKey.NameKey.self, forKey: .name)
+        let titleNameContainer = try nameContentContainer.decode(String.self, forKey: .title)
+        let firstNameContainer = try nameContentContainer.decode(String.self, forKey: .first)
+        let lastNameContainer = try nameContentContainer.decode(String.self, forKey: .last)
         
-        let photo = try container.decode(String.self, forKey: .picture)
+        
+        name = "\(titleNameContainer).\t \(firstNameContainer)\t\(lastNameContainer)"
+        
+        let photoContainer = try container.nestedContainer(keyedBy: ResultsKey.PictureKey.self, forKey: .picture)
+        let photo = try photoContainer.decode(String.self, forKey: .large)
+        
         picture = URL(string: photo)
         
         email = try container.decode(String.self, forKey: .email)
         phone = try container.decode(String.self, forKey: .phone)
     }
-    
+//
 }
 
 //struct Users: Codable{

@@ -45,7 +45,7 @@ class UserController{
                    completion(nil, NSError(domain: "com.LambdaSchool.Random/Users.ErrorDomain", code: -1, userInfo: nil))
                    return
                }
-               
+           
                do {
                  let jsonDecoder = JSONDecoder()
                    let decodedObject = try jsonDecoder.decode(Results.self, from: data)

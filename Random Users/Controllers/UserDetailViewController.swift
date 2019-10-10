@@ -16,11 +16,20 @@ class UserDetailViewController: UIViewController {
 
     @IBOutlet weak var phoneNumber: UILabel!
     
-    var key: Cache<URL, UIImage>?
+    var key: Cache<String, UIImage>?
     var user: UsersPhotoReference? {
         didSet{
             updateViews()
         }
+    }
+    
+    override func viewDidLoad() {
+        updateViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        updateViews()
     }
     
     
@@ -28,10 +37,10 @@ class UserDetailViewController: UIViewController {
     func updateViews(){
         guard let user = user,
             let image = user.picture,
-            let key = key
+            let key = key, isViewLoaded
         else {return}
         
-        imageView.image = key.value(key: image)
+        imageView.image = key.value(key: "\(image)")
         detailLabel.text = user.name
         emailLabel.text = user.email
         phoneNumber.text = user.phone
